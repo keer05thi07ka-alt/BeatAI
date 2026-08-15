@@ -116,6 +116,11 @@ MEDICATION_KNOWLEDGE = {
         "title": "Modified Release (MR)",
         "role": "Controlled-Release Pharmaceutical Formulation",
         "reason": "Modified Release (MR) means the rate and timing of drug release in your digestive tract is engineered for smooth, controlled absorption. This maintains constant therapeutic drug levels in your body (like Metazine MR for heart tissue care) and reduces stomach irritation. Note: Never crush or chew MR tablets."
+    },
+    "bd": {
+        "title": "BD (Bis in Die - Twice Daily)",
+        "role": "Prescription Timing Abbreviation",
+        "reason": "BD stands for 'Bis in Die' (Latin for 'Twice Daily'). On a prescription, '1-0-1 (BD)' means: Take 1 dose in the Morning, 0 in the Afternoon, and 1 dose in the Evening/Night (total 2 doses per day)."
     }
 }
 

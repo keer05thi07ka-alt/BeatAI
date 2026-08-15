@@ -121,6 +121,26 @@ MEDICATION_KNOWLEDGE = {
         "title": "BD (Bis in Die - Twice Daily)",
         "role": "Prescription Timing Abbreviation",
         "reason": "BD stands for 'Bis in Die' (Latin for 'Twice Daily'). On a prescription, '1-0-1 (BD)' means: Take 1 dose in the Morning, 0 in the Afternoon, and 1 dose in the Evening/Night (total 2 doses per day)."
+    },
+    "flagyl": {
+        "title": "Flagyl 400mg (Metronidazole)",
+        "role": "Anti-Diarrheal & Anti-Protozoal Antimicrobial",
+        "reason": "Flagyl contains Metronidazole (400mg). It is a nitroimidazole antimicrobial prescribed for acute gastroenteritis, intestinal protozoal infections, and loose motions to eradicate causative intestinal pathogens."
+    },
+    "drotin": {
+        "title": "Drotin-M (Drotaverine + Mefenamic Acid)",
+        "role": "Anti-Spasmodic & Abdominal Pain Relief",
+        "reason": "Drotin-M is a combination anti-spasmodic tablet. Drotaverine relaxes smooth intestinal muscle spasms, while Mefenamic acid reduces inflammatory stomach pain and cramps caused by gastroenteritis."
+    },
+    "pan 40": {
+        "title": "Pan 40 (Pantoprazole 40mg)",
+        "role": "Gastric Acid Reducer (PPI)",
+        "reason": "Pan 40 contains Pantoprazole (40mg), a Proton Pump Inhibitor (PPI). Prescribed before breakfast (BBF) to reduce stomach acid, prevent hyperacidity, and soothe stomach lining irritation during illness."
+    },
+    "electral": {
+        "title": "Electral Powder (Oral Rehydration Salts - ORS)",
+        "role": "Oral Electrolyte Rehydration Therapy",
+        "reason": "Electral Powder is a World Health Organization (WHO) formulation of essential electrolytes (Sodium, Potassium, Chloride, Citrate, and Dextrose). It restores vital fluid balance and prevents dangerous dehydration during acute diarrhea or vomiting."
     }
 }
 

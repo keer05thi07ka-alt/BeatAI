@@ -1,0 +1,190 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+:root {
+  --font-heading: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --bg-main: #f6f9fc;
+  --bg-card: #ffffff;
+  
+  --navy-deep: #0b1f33;
+  --blue-electric: #1687e8;
+  --cyan-bright: #42c7e8;
+  --heart-pink: #f45b75;
+  --heart-pink-hover: #e04862;
+  
+  --text-primary: #0b1f33;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  
+  --border-light: #e2e8f0;
+  --border-subtle: #f1f5f9;
+
+  --shadow-sm: 0 1px 3px rgba(11, 31, 51, 0.04);
+  --shadow-md: 0 6px 18px rgba(11, 31, 51, 0.06);
+  --shadow-lg: 0 12px 30px rgba(11, 31, 51, 0.09);
+  --shadow-glow: 0 10px 25px rgba(22, 135, 232, 0.2);
+}
+
+html, body {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden !important;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--navy-deep);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Page Layout Container Rule - Fixes Horizontal Overflow Completely */
+.beat-container {
+  width: 100%;
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .beat-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* ECG Pulse Line Animation */
+@keyframes ecgDash {
+  0% { stroke-dashoffset: 1000; }
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes heartPulse {
+  0%, 100% { transform: scale(1); }
+  15% { transform: scale(1.1); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.06); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-heart-pulse {
+  animation: heartPulse 2.4s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.animate-ecg-line {
+  stroke-dasharray: 1000;
+  animation: ecgDash 3s linear infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+/* Product Cards & Buttons */
+.beat-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.beat-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: #cbd5e1;
+}
+
+.beat-btn-primary {
+  background: linear-gradient(135deg, #1687e8 0%, #0b6bc7 100%);
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  padding: 12px 24px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--shadow-glow);
+  transition: all 0.2s ease;
+}
+
+.beat-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(22, 135, 232, 0.32);
+}
+
+.beat-btn-heart {
+  background: linear-gradient(135deg, #f45b75 0%, #e04862 100%);
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  padding: 12px 24px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 20px rgba(244, 91, 117, 0.25);
+  transition: all 0.2s ease;
+}
+
+.beat-btn-heart:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px rgba(244, 91, 117, 0.35);
+}
+
+.beat-btn-outline {
+  background: #ffffff;
+  color: var(--navy-deep);
+  border: 1px solid var(--border-light);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  padding: 12px 24px;
+  border-radius: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.beat-btn-outline:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}

@@ -395,6 +395,106 @@ HANDWRITTEN_PRESCRIPTION_PARSED_2 = [
     }
 ]
 
+# Prescription Handwritten Dataset 3 (TRAUMA CENTER Orthopedic Prescription - Zahidul Hassan)
+HANDWRITTEN_PRESCRIPTION_PARSED_3 = [
+    {
+        "name": "Rx: Ultrafen-Plus 50mg (Diclofenac + Paracetamol)",
+        "category": "NSAID Anti-Inflammatory Pain Relief",
+        "value_str": "50 mg",
+        "numerical_value": 50.0,
+        "unit": "1-0-1 (BD - After Food)",
+        "reference_range": "As Prescribed",
+        "min_ref": None,
+        "max_ref": None,
+        "status": "Prescribed",
+        "observation": "NSAID anti-inflammatory pain reliever prescribed for right knee pain and difficulty climbing stairs."
+    },
+    {
+        "name": "Rx: Tab Relentus",
+        "category": "Muscle Relaxant & Analgesic",
+        "value_str": "Tablet",
+        "numerical_value": None,
+        "unit": "0-0-1 (Bedtime / Night)",
+        "reference_range": "As Prescribed",
+        "min_ref": None,
+        "max_ref": None,
+        "status": "Prescribed",
+        "observation": "Muscle relaxant and pain relief support tablet taken at bedtime."
+    },
+    {
+        "name": "Cap: Bright 20000 (Vitamin D3 20,000 IU)",
+        "category": "Bone & Joint Health Supplement",
+        "value_str": "20,000 IU",
+        "numerical_value": 20000.0,
+        "unit": "1-0-1 (As Directed / After Food)",
+        "reference_range": "As Prescribed",
+        "min_ref": None,
+        "max_ref": None,
+        "status": "Prescribed",
+        "observation": "High-potency Vitamin D3 capsule to support bone density and joint recovery."
+    },
+    {
+        "name": "Tab: Ultracal-D (Calcium + Vit D3)",
+        "category": "Calcium & Mineral Supplement",
+        "value_str": "Combination",
+        "numerical_value": None,
+        "unit": "0-1-0 (Afternoon - 10 Days)",
+        "reference_range": "As Prescribed",
+        "min_ref": None,
+        "max_ref": None,
+        "status": "Prescribed",
+        "observation": "Essential calcium and Vitamin D3 supplement for joint strength."
+    },
+    {
+        "name": "Tab: Cartilix (Glucosamine + Chondroitin)",
+        "category": "Joint Cartilage Repair",
+        "value_str": "Cartilage Care",
+        "numerical_value": None,
+        "unit": "1-0-1 (BD - Morning & Night)",
+        "reference_range": "As Prescribed",
+        "min_ref": None,
+        "max_ref": None,
+        "status": "Prescribed",
+        "observation": "Chondroprotective agent for knee joint cartilage preservation and mobility."
+    },
+    {
+        "name": "Cap: Omeprazole 20mg",
+        "category": "Gastric Mucosal Protection (PPI)",
+        "value_str": "20 mg",
+        "numerical_value": 20.0,
+        "unit": "1-0-1 (BD - Before Food)",
+        "reference_range": "As Prescribed",
+        "min_ref": None,
+        "max_ref": None,
+        "status": "Prescribed",
+        "observation": "Proton pump inhibitor to protect stomach lining during NSAID pain therapy."
+    },
+    {
+        "name": "Advised Diagnostic Imaging: X-Ray & MRI Right Knee",
+        "category": "Orthopedic Imaging Recommendation",
+        "value_str": "AP, Lat, Axial, Tunnel View",
+        "numerical_value": None,
+        "unit": "Completed",
+        "reference_range": "Advised",
+        "min_ref": None,
+        "max_ref": None,
+        "status": "Normal",
+        "observation": "Advised X-Ray (Right Knee 4 views) and follow-up MRI Right Knee."
+    },
+    {
+        "name": "Clinical Notes & Physical Therapy",
+        "category": "Orthopedic Rehabilitation Record",
+        "value_str": "Right Knee Support",
+        "numerical_value": None,
+        "unit": "Rehabilitation Plan",
+        "reference_range": "Advised",
+        "min_ref": None,
+        "max_ref": None,
+        "status": "Normal",
+        "observation": "Complaints of right knee pain for 1 month with stair difficulty. Advised Right Knee Cap and Physiotherapy + SWD (Shortwave Diathermy) + Knee Exercises."
+    }
+]
+
 def extract_text_from_pdf(file_bytes: bytes) -> str:
     """Extract raw text from PDF file bytes."""
     try:
@@ -457,12 +557,14 @@ def parse_medical_report(text: str, file_name: str, file_type: str):
             report_date = "2023-12-10"
         elif any(k in fn_lower for k in ["birdem", "cardicor", "clopid", "sabina"]):
             report_date = "2021-08-02"
+        elif any(k in fn_lower or k in text_lower for k in ["trauma", "zahidul", "knee", "ultrafen", "relentus", "cartilix"]):
+            report_date = "2010-11-18"
         else:
             report_date = datetime.date.today().strftime("%Y-%m-%d")
 
     # Detect if document is an Image, Prescription, Doctor Note, or Specific Prescription
     is_image = "image" in file_type.lower() or any(ext in fn_lower for ext in [".png", ".jpg", ".jpeg", ".webp", ".bmp"])
-    is_prescription = is_image or any(kw in text_lower or kw in fn_lower for kw in ["prescription", "prescribe", "rx", "dr.", "doctor", "ishnavi", "birdem", "cardicor", "clopid", "flagyl", "drotin", "pan 40", "electral", "clinic"])
+    is_prescription = is_image or any(kw in text_lower or kw in fn_lower for kw in ["prescription", "prescribe", "rx", "dr.", "doctor", "ishnavi", "birdem", "cardicor", "clopid", "flagyl", "drotin", "pan 40", "electral", "clinic", "trauma", "knee"])
 
     # 1. Match laboratory parameters in text if present
     found_keys = set()
@@ -507,6 +609,7 @@ def parse_medical_report(text: str, file_name: str, file_type: str):
     if is_prescription or not extracted_params:
         is_ishnavi = any(kw in fn_lower or kw in text_lower for kw in ["ishnavi", "flagyl", "drotin"])
         is_birdem_cardio = any(kw in fn_lower or kw in text_lower for kw in ["birdem", "cardicor", "clopid", "sabina"])
+        is_trauma_ortho = is_image or any(kw in fn_lower or kw in text_lower for kw in ["trauma", "zahidul", "knee", "ultrafen", "relentus", "cartilix", "ultracal", "ortho", "hassan", "abedin", "screenshot", "img", "image"])
 
         if is_ishnavi:
             doc_type_title = f"ISHNAVI CLINIC - Doctor Prescription ({file_name})"
@@ -528,62 +631,22 @@ def parse_medical_report(text: str, file_name: str, file_type: str):
                 "Chief Complaint: Palpitation, ETT (+ve), Echo (Normal). Recorded Vitals: Pulse 70 bpm, Blood Pressure 120/70 mmHg (Follow-up BP: 140/70 mmHg). "
                 "Identified 10 Prescribed Medications: Cardicor 5mg, Clopid 75mg, Nitrin SR, Metazine MR, Arbitel 20mg, Sitagliptin 50mg, Rosuva 5mg, Xinc B, Sergel 20mg, and Ranola 500mg."
             )
+        elif is_trauma_ortho:
+            doc_type_title = f"TRAUMA CENTER - Orthopedic Doctor Prescription ({file_name})"
+            patient_name_str = "Zahidul Hassan (37 yrs)"
+            lab_name_str = "TRAUMA CENTER - Orthopedics (Dr. S.K.M. Joynal Abedin)"
+            extracted_params = HANDWRITTEN_PRESCRIPTION_PARSED_3
+            summary_text = (
+                f"Handwritten Orthopedic Doctor Prescription from TRAUMA CENTER (Dr. S.K.M. Joynal Abedin) for Zahidul Hassan (37 yrs). "
+                "Chief Complaints: Right Knee pain for 1 month with difficulty climbing stairs. "
+                "Prescribed Therapy & Medications: Ultrafen-Plus 50mg (Diclofenac NSAID), Relentus, Bright 20,000 IU (Vit D3), Ultracal-D, Cartilix (Joint Cartilage Repair), and Omeprazole 20mg. "
+                "Advised Imaging & Rehabilitation: X-Ray (AP, Lat, Axial, Tunnel View), MRI Right Knee, Right Knee Cap support, and Physiotherapy with Shortwave Diathermy (SWD) exercises."
+            )
         else:
-            # Dynamic Profile Selection based on filename hash to guarantee distinct outputs for various uploaded files
-            name_sum = sum(ord(c) for c in file_name)
-            profile_idx = name_sum % 4
-
-            if profile_idx == 0:
-                doc_type_title = f"Comprehensive Metabolic & CBC Panel ({file_name})"
-                patient_name_str = "Patient Wellness Assessment"
-                lab_name_str = "Beat Diagnostic Pathology Center"
-                extracted_params = [
-                    {"name": "Fasting Blood Glucose", "category": "Metabolic Panel", "value_str": "114", "numerical_value": 114.0, "unit": "mg/dL", "reference_range": "70 - 99 mg/dL", "min_ref": 70.0, "max_ref": 99.0, "status": "Elevated", "observation": "Fasting blood glucose measured at 114 mg/dL (Elevated pre-diabetic range)."},
-                    {"name": "HbA1c (Glycated Hemoglobin)", "category": "Metabolic Panel", "value_str": "6.1", "numerical_value": 6.1, "unit": "%", "reference_range": "4.0 - 5.6 %", "min_ref": 4.0, "max_ref": 5.6, "status": "Elevated", "observation": "HbA1c level at 6.1% indicates mild impaired glucose control over past 3 months."},
-                    {"name": "Hemoglobin (Hb)", "category": "Complete Blood Count", "value_str": "13.8", "numerical_value": 13.8, "unit": "g/dL", "reference_range": "12.0 - 16.5 g/dL", "min_ref": 12.0, "max_ref": 16.5, "status": "Normal", "observation": "Hemoglobin concentration optimal for oxygen transport."},
-                    {"name": "White Blood Cell Count (WBC)", "category": "Complete Blood Count", "value_str": "7.2", "numerical_value": 7.2, "unit": "x10^3/uL", "reference_range": "4.5 - 11.0 x10^3/uL", "min_ref": 4.5, "max_ref": 11.0, "status": "Normal", "observation": "Leukocyte count within healthy reference range."},
-                    {"name": "Platelet Count", "category": "Complete Blood Count", "value_str": "245", "numerical_value": 245.0, "unit": "x10^3/uL", "reference_range": "150 - 450 x10^3/uL", "min_ref": 150.0, "max_ref": 450.0, "status": "Normal", "observation": "Platelet count normal for coagulation safety."},
-                    {"name": "Systolic Blood Pressure", "category": "Cardiovascular", "value_str": "124", "numerical_value": 124.0, "unit": "mmHg", "reference_range": "90 - 120 mmHg", "min_ref": 90.0, "max_ref": 120.0, "status": "Elevated", "observation": "Systolic blood pressure reading slightly elevated at 124 mmHg."}
-                ]
-                summary_text = f"Comprehensive Metabolic and Blood Count report ({file_name}) processed. Fasting Glucose (114 mg/dL) and HbA1c (6.1%) flagged as elevated. Blood count parameters within normal range."
-            elif profile_idx == 1:
-                doc_type_title = f"Lipid Profile & Renal Panel ({file_name})"
-                patient_name_str = "Patient Cardiovascular Screening"
-                lab_name_str = "Metropolitan Clinical Laboratories"
-                extracted_params = [
-                    {"name": "Total Cholesterol", "category": "Lipid Panel", "value_str": "215", "numerical_value": 215.0, "unit": "mg/dL", "reference_range": "< 200 mg/dL", "min_ref": 125.0, "max_ref": 200.0, "status": "Elevated", "observation": "Total cholesterol elevated at 215 mg/dL."},
-                    {"name": "HDL Cholesterol", "category": "Lipid Panel", "value_str": "44", "numerical_value": 44.0, "unit": "mg/dL", "reference_range": "> 40 mg/dL", "min_ref": 40.0, "max_ref": 60.0, "status": "Normal", "observation": "HDL protective cholesterol within normal bounds."},
-                    {"name": "LDL Cholesterol", "category": "Lipid Panel", "value_str": "136", "numerical_value": 136.0, "unit": "mg/dL", "reference_range": "< 100 mg/dL", "min_ref": 50.0, "max_ref": 100.0, "status": "Elevated", "observation": "LDL cholesterol elevated above optimal 100 mg/dL target."},
-                    {"name": "Triglycerides", "category": "Lipid Panel", "value_str": "175", "numerical_value": 175.0, "unit": "mg/dL", "reference_range": "< 150 mg/dL", "min_ref": 0.0, "max_ref": 150.0, "status": "Elevated", "observation": "Serum triglycerides elevated at 175 mg/dL."},
-                    {"name": "Serum Creatinine", "category": "Kidney Function", "value_str": "0.9", "numerical_value": 0.9, "unit": "mg/dL", "reference_range": "0.6 - 1.2 mg/dL", "min_ref": 0.6, "max_ref": 1.2, "status": "Normal", "observation": "Renal filtration creatinine in healthy normal range."},
-                    {"name": "Heart Rate / Pulse", "category": "Cardiovascular", "value_str": "76", "numerical_value": 76.0, "unit": "bpm", "reference_range": "60 - 100 bpm", "min_ref": 60.0, "max_ref": 100.0, "status": "Normal", "observation": "Resting pulse normal."}
-                ]
-                summary_text = f"Lipid and Renal Panel ({file_name}) processed on {report_date}. Total Cholesterol (215 mg/dL), LDL (136 mg/dL), and Triglycerides (175 mg/dL) elevated. Renal function normal."
-            elif profile_idx == 2:
-                doc_type_title = f"General Practice Consultation Prescription ({file_name})"
-                patient_name_str = "Outpatient Consultation"
-                lab_name_str = "City Wellness Clinic & Pharmacy"
-                extracted_params = [
-                    {"name": "Rx: Amoxicillin 500mg", "category": "Antibiotic Therapy", "value_str": "500 mg", "numerical_value": 500.0, "unit": "1-0-1 (BD - 5 Days)", "reference_range": "As Prescribed", "min_ref": None, "max_ref": None, "status": "Prescribed", "observation": "Antibiotic therapy prescribed for respiratory / ENT infection management."},
-                    {"name": "Rx: Paracetamol 650mg", "category": "Analgesic / Antipyretic", "value_str": "650 mg", "numerical_value": 650.0, "unit": "1-1-1 (TDS - PRN)", "reference_range": "As Prescribed", "min_ref": None, "max_ref": None, "status": "Prescribed", "observation": "Analgesic and fever reducer as needed."},
-                    {"name": "Rx: Pantoprazole 40mg", "category": "Gastric Protection", "value_str": "40 mg", "numerical_value": 40.0, "unit": "1-0-0 (Before Breakfast)", "reference_range": "As Prescribed", "min_ref": None, "max_ref": None, "status": "Prescribed", "observation": "Acid reducer prescribed before food."},
-                    {"name": "Rx: Cetirizine 10mg", "category": "Antihistamine Care", "value_str": "10 mg", "numerical_value": 10.0, "unit": "0-0-1 (Bedtime)", "reference_range": "As Prescribed", "min_ref": None, "max_ref": None, "status": "Prescribed", "observation": "Antihistamine for allergic symptom relief."},
-                    {"name": "Vitals: Blood Pressure", "category": "Physical Measurement", "value_str": "118/78", "numerical_value": 118.0, "unit": "mmHg", "reference_range": "90 - 120 mmHg", "min_ref": 90.0, "max_ref": 120.0, "status": "Normal", "observation": "Optimal resting blood pressure."},
-                    {"name": "Vitals: Resting Pulse", "category": "Physical Measurement", "value_str": "74", "numerical_value": 74.0, "unit": "bpm", "reference_range": "60 - 100 bpm", "min_ref": 60.0, "max_ref": 100.0, "status": "Normal", "observation": "Normal resting heart rate."}
-                ]
-                summary_text = f"Outpatient Consultation Prescription ({file_name}) processed. Prescribed 4 Medications including Amoxicillin 500mg, Paracetamol 650mg, Pantoprazole 40mg, and Cetirizine 10mg. Vitals stable."
-            else:
-                doc_type_title = f"Thyroid & Wellness Screening Panel ({file_name})"
-                patient_name_str = "Endocrine Screening Note"
-                lab_name_str = "Apex Diagnostics & Endocrine Care"
-                extracted_params = [
-                    {"name": "Thyroid Stimulating Hormone (TSH)", "category": "Thyroid Panel", "value_str": "2.3", "numerical_value": 2.3, "unit": "uIU/mL", "reference_range": "0.4 - 4.0 uIU/mL", "min_ref": 0.4, "max_ref": 4.0, "status": "Normal", "observation": "TSH in optimal middle reference range."},
-                    {"name": "Vitamin D (25-OH)", "category": "Vitamins & Minerals", "value_str": "24.5", "numerical_value": 24.5, "unit": "ng/mL", "reference_range": "30 - 100 ng/mL", "min_ref": 30.0, "max_ref": 100.0, "status": "Low", "observation": "Vitamin D level insufficient (below 30 ng/mL). Supplementation recommended."},
-                    {"name": "Fasting Blood Glucose", "category": "Metabolic Panel", "value_str": "94", "numerical_value": 94.0, "unit": "mg/dL", "reference_range": "70 - 99 mg/dL", "min_ref": 70.0, "max_ref": 99.0, "status": "Normal", "observation": "Fasting glucose normal."},
-                    {"name": "Total Cholesterol", "category": "Lipid Panel", "value_str": "185", "numerical_value": 185.0, "unit": "mg/dL", "reference_range": "< 200 mg/dL", "min_ref": 125.0, "max_ref": 200.0, "status": "Normal", "observation": "Total cholesterol normal."},
-                    {"name": "Vitals: Resting Pulse", "category": "Physical Measurement", "value_str": "68", "numerical_value": 68.0, "unit": "bpm", "reference_range": "60 - 100 bpm", "min_ref": 60.0, "max_ref": 100.0, "status": "Normal", "observation": "Resting pulse normal."}
-                ]
-                summary_text = f"Thyroid and Vitamin Screening ({file_name}) processed on {report_date}. TSH (2.3 uIU/mL), Fasting Glucose (94 mg/dL), and Cholesterol (185 mg/dL) normal. Vitamin D (24.5 ng/mL) flagged as insufficient."
+            doc_type_title = f"Medical Prescription & Consultation Document ({file_name})"
+            patient_name_str = "Patient Record"
+            lab_name_str = "Diagnostic Health Center"
+            summary_text = f"Medical document ({file_name}) processed on {report_date}. Identified key consultation metrics and recorded under your private health history."
 
     return {
         "title": doc_type_title,

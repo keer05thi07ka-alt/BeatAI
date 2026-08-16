@@ -141,6 +141,26 @@ MEDICATION_KNOWLEDGE = {
         "title": "Electral Powder (Oral Rehydration Salts - ORS)",
         "role": "Oral Electrolyte Rehydration Therapy",
         "reason": "Electral Powder is a World Health Organization (WHO) formulation of essential electrolytes (Sodium, Potassium, Chloride, Citrate, and Dextrose). It restores vital fluid balance and prevents dangerous dehydration during acute diarrhea or vomiting."
+    },
+    "ultrafen": {
+        "title": "Ultrafen-Plus 50mg (Diclofenac + Paracetamol)",
+        "role": "NSAID Anti-Inflammatory & Analgesic Pain Reliever",
+        "reason": "Ultrafen-Plus combines Diclofenac (50mg) and Paracetamol. It is an anti-inflammatory analgesic prescribed for joint pain, knee osteoarthritis, and soft tissue swelling to reduce pain and improve joint mobility."
+    },
+    "relentus": {
+        "title": "Tab Relentus",
+        "role": "Muscle Relaxant & Analgesic Support",
+        "reason": "Relentus is prescribed as a muscle relaxant and analgesic support tablet taken at bedtime to relieve muscle spasm and joint stiffness associated with knee pain."
+    },
+    "cartilix": {
+        "title": "Tab Cartilix (Glucosamine + Chondroitin)",
+        "role": "Joint Cartilage Repair & Chondroprotective Care",
+        "reason": "Cartilix provides Glucosamine and Chondroitin Sulfate, key building blocks for articular cartilage. Prescribed in knee joint pain to stimulate cartilage repair, reduce joint space narrowing, and protect against degeneration."
+    },
+    "ultracal": {
+        "title": "Tab Ultracal-D (Calcium + Vitamin D3)",
+        "role": "Bone Mineral Density & Calcium Supplementation",
+        "reason": "Ultracal-D delivers bioavailable Calcium and Vitamin D3 to support bone mineralization, strengthen skeletal joint structures, and aid recovery in orthopedic disorders."
     }
 }
 

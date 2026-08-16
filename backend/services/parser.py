@@ -455,7 +455,7 @@ def parse_medical_report(text: str, file_name: str, file_type: str):
     else:
         if any(k in fn_lower for k in ["ishnavi", "flagyl", "drotin"]):
             report_date = "2023-12-10"
-        elif any(k in fn_lower for k in ["birdem", "195417", "195505", "sabina", "cardicor"]):
+        elif any(k in fn_lower for k in ["birdem", "cardicor", "clopid", "sabina"]):
             report_date = "2021-08-02"
         else:
             report_date = datetime.date.today().strftime("%Y-%m-%d")
@@ -506,7 +506,7 @@ def parse_medical_report(text: str, file_name: str, file_type: str):
     # 2. Extract prescribed handwritten medications, vitals, & doctor notes for images/prescriptions
     if is_prescription or not extracted_params:
         is_ishnavi = any(kw in fn_lower or kw in text_lower for kw in ["ishnavi", "flagyl", "drotin"])
-        is_birdem_cardio = any(kw in fn_lower or kw in text_lower for kw in ["birdem", "cardicor", "clopid", "sabina", "195417", "195505"])
+        is_birdem_cardio = any(kw in fn_lower or kw in text_lower for kw in ["birdem", "cardicor", "clopid", "sabina"])
 
         if is_ishnavi:
             doc_type_title = f"ISHNAVI CLINIC - Doctor Prescription ({file_name})"

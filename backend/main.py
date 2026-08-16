@@ -189,11 +189,14 @@ async def upload_medical_report(
             value_str=p["value_str"],
             numerical_value=p.get("numerical_value"),
             unit=p["unit"],
-            reference_range=p["reference_range"],
+            reference_range=p.get("reference_range", "Not provided"),
             min_ref=p.get("min_ref"),
             max_ref=p.get("max_ref"),
-            status=p["status"],
-            observation=p["observation"]
+            frequency=p.get("frequency", "Not applicable"),
+            duration=p.get("duration", "Not applicable"),
+            status=p.get("status", "Found"),
+            observation=p.get("observation", "As reported"),
+            extraction_status=p.get("extraction_status", "Confirmed")
         )
         param_entries.append(pe)
 
@@ -218,8 +221,11 @@ async def upload_medical_report(
                 "numerical_value": p.numerical_value,
                 "unit": p.unit,
                 "reference_range": p.reference_range,
+                "frequency": getattr(p, "frequency", "Not applicable"),
+                "duration": getattr(p, "duration", "Not applicable"),
                 "status": p.status,
-                "observation": p.observation
+                "observation": p.observation,
+                "extraction_status": getattr(p, "extraction_status", "Confirmed")
             } for p in db_report.parameters
         ]
     }
@@ -254,8 +260,11 @@ def get_all_reports(
                     "numerical_value": p.numerical_value,
                     "unit": p.unit,
                     "reference_range": p.reference_range,
+                    "frequency": getattr(p, "frequency", "Not applicable"),
+                    "duration": getattr(p, "duration", "Not applicable"),
                     "status": p.status,
-                    "observation": p.observation
+                    "observation": p.observation,
+                    "extraction_status": getattr(p, "extraction_status", "Confirmed")
                 } for p in r.parameters
             ]
         })
@@ -311,8 +320,11 @@ def get_report_by_id(
                 "numerical_value": p.numerical_value,
                 "unit": p.unit,
                 "reference_range": p.reference_range,
+                "frequency": getattr(p, "frequency", "Not applicable"),
+                "duration": getattr(p, "duration", "Not applicable"),
                 "status": p.status,
-                "observation": p.observation
+                "observation": p.observation,
+                "extraction_status": getattr(p, "extraction_status", "Confirmed")
             } for p in r.parameters
         ]
     }
@@ -410,7 +422,11 @@ def chat_healthcare_assistant(
                         "unit": p.unit,
                         "reference_range": p.reference_range,
                         "status": p.status,
-                        "numerical_value": p.numerical_value
+                        "numerical_value": p.numerical_value,
+                        "frequency": getattr(p, "frequency", "Not applicable"),
+                        "duration": getattr(p, "duration", "Not applicable"),
+                        "observation": p.observation,
+                        "extraction_status": getattr(p, "extraction_status", "Confirmed")
                     } for p in r.parameters
                 ]
             }
@@ -430,7 +446,11 @@ def chat_healthcare_assistant(
                     "unit": p.unit,
                     "reference_range": p.reference_range,
                     "status": p.status,
-                    "numerical_value": p.numerical_value
+                    "numerical_value": p.numerical_value,
+                    "frequency": getattr(p, "frequency", "Not applicable"),
+                    "duration": getattr(p, "duration", "Not applicable"),
+                    "observation": p.observation,
+                    "extraction_status": getattr(p, "extraction_status", "Confirmed")
                 } for p in r.parameters
             ]
         })

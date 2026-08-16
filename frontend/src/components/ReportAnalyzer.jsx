@@ -389,30 +389,35 @@ const ReportAnalyzer = ({ selectedReport, reports, onUploadSuccess, setActiveTab
               <table className="w-full text-left text-xs sm:text-sm border-collapse">
                 <thead>
                   <tr className="border-b border-slate-200 text-slate-400 font-bold uppercase tracking-wider text-[11px]">
-                    <th className="pb-3">Parameter Name</th>
-                    <th className="pb-3">Category</th>
-                    <th className="pb-3">Value</th>
-                    <th className="pb-3">Reference Range</th>
-                    <th className="pb-3">Observation</th>
+                    <th className="pb-3 pr-4">Parameter Name</th>
+                    <th className="pb-3 pr-4">Category</th>
+                    <th className="pb-3 pr-4">Value</th>
+                    <th className="pb-3 pr-4 whitespace-nowrap">Reference Range</th>
+                    <th className="pb-3 pr-4">Observation</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {uploadedReport.parameters?.map((param, index) => (
                     <tr key={index} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-4 font-bold text-[#0B1F33]">
+                      <td className="py-4 pr-4 font-bold text-[#0B1F33]">
                         {param.name}
                       </td>
-                      <td className="py-4 text-slate-500 text-xs">
+                      <td className="py-4 pr-4 text-slate-500 text-xs">
                         {param.category}
                       </td>
-                      <td className="py-4 font-extrabold text-[#0B1F33]">
-                        {param.value_str} <span className="text-xs font-normal text-slate-400">{param.unit}</span>
+                      <td className="py-4 pr-4 font-extrabold text-[#0B1F33]">
+                        {param.value_str} {param.unit && param.unit !== 'N/A' && <span className="text-xs font-normal text-slate-400">{param.unit}</span>}
                       </td>
-                      <td className="py-4 text-slate-500 text-xs">
+                      <td className="py-4 pr-4 text-slate-500 text-xs">
                         {param.reference_range}
                       </td>
-                      <td className="py-4 text-slate-600 text-xs max-w-xs leading-relaxed">
-                        {param.observation}
+                      <td className="py-4 pr-4 text-slate-600 text-xs max-w-xs leading-relaxed">
+                        <div>{param.observation}</div>
+                        {(param.frequency && param.frequency !== 'Not applicable' && param.frequency !== 'N/A') && (
+                          <div className="mt-1 font-semibold text-[#1687E8]">
+                            Dosage: {param.frequency} {param.duration && param.duration !== 'Not applicable' && param.duration !== 'Not provided' ? `(${param.duration})` : ''}
+                          </div>
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -420,6 +425,15 @@ const ReportAnalyzer = ({ selectedReport, reports, onUploadSuccess, setActiveTab
               </table>
             </div>
           </div>
+
+          {/* New Document Summary Section */}
+          <div className="beat-card p-6 sm:p-8 space-y-4">
+            <h3 className="text-lg font-bold text-[#0B1F33]">Document Summary</h3>
+            <p className="text-sm text-slate-600 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100">
+              {uploadedReport.summary}
+            </p>
+          </div>
+
 
         </div>
       )}

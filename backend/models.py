@@ -43,8 +43,11 @@ class ParameterEntry(Base):
     reference_range = Column(String) # e.g., "70-99"
     min_ref = Column(Float, nullable=True)
     max_ref = Column(Float, nullable=True)
-    status = Column(String, default="Normal") # Normal, Elevated, Low, Outside Range
+    frequency = Column(String, nullable=True) # e.g., 1-0-1, SOS
+    duration = Column(String, nullable=True) # e.g., 3 days, 1 month
+    status = Column(String, default="Normal") # For backward compatibility
     observation = Column(Text)
+    extraction_status = Column(String, default="Confirmed") # Confirmed, Likely, Unclear
 
     report = relationship("Report", back_populates="parameters")
 

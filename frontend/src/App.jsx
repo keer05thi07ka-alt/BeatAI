@@ -192,6 +192,7 @@ function App() {
 
         {activeTab === 'assistant' && (
           <HealthcareAssistant
+            currentUser={currentUser}
             reports={reports}
             selectedReport={selectedReportForAnalysis}
           />

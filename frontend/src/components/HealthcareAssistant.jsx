@@ -10,13 +10,16 @@ import {
   CheckCircle2
 } from 'lucide-react';
 
-const HealthcareAssistant = ({ reports, activeReport }) => {
+const HealthcareAssistant = ({ currentUser, reports, activeReport }) => {
   const [selectedReportId, setSelectedReportId] = useState(activeReport ? activeReport.id : (reports && reports.length > 0 ? reports[reports.length - 1].id : null));
+  
+  const firstName = currentUser?.name ? currentUser.name.split(' ')[0] : 'User';
+  
   const [messages, setMessages] = useState([
     {
       id: 1,
       sender: 'assistant',
-      text: "Hello Alex! I am your Beat Healthcare Assistant. I can answer any questions about your selected medical report, parameter values, reference ranges, and health trends. Ask me anything!",
+      text: `Hello ${firstName}! I am your Beat Healthcare Assistant. I can answer any questions about your selected medical report, parameter values, reference ranges, and health trends. Ask me anything!`,
     }
   ]);
   const [inputQuery, setInputQuery] = useState('');

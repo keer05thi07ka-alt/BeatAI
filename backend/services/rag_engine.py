@@ -122,6 +122,31 @@ MEDICATION_KNOWLEDGE = {
         "role": "Prescription Timing Abbreviation",
         "reason": "BD stands for 'Bis in Die' (Latin for 'Twice Daily'). On a prescription, '1-0-1 (BD)' means: Take 1 dose in the Morning, 0 in the Afternoon, and 1 dose in the Evening/Night (total 2 doses per day)."
     },
+    "1-0-1": {
+        "title": "Dosage Frequency: 1-0-1",
+        "role": "Prescription Instructions",
+        "reason": "The code '1-0-1' means you should take the medication twice a day: 1 dose in the Morning, 0 in the Afternoon, and 1 dose in the Evening/Night."
+    },
+    "0-1-0": {
+        "title": "Dosage Frequency: 0-1-0",
+        "role": "Prescription Instructions",
+        "reason": "The code '0-1-0' means you should take the medication exactly once a day, in the Afternoon/Midday."
+    },
+    "1-0-0": {
+        "title": "Dosage Frequency: 1-0-0",
+        "role": "Prescription Instructions",
+        "reason": "The code '1-0-0' means you should take the medication exactly once a day, in the Morning."
+    },
+    "0-0-1": {
+        "title": "Dosage Frequency: 0-0-1",
+        "role": "Prescription Instructions",
+        "reason": "The code '0-0-1' means you should take the medication exactly once a day, in the Evening/Night."
+    },
+    "1-1-1": {
+        "title": "Dosage Frequency: 1-1-1",
+        "role": "Prescription Instructions",
+        "reason": "The code '1-1-1' means you should take the medication three times a day: 1 dose in the Morning, 1 dose in the Afternoon, and 1 dose in the Evening/Night."
+    },
     "flagyl": {
         "title": "Flagyl 400mg (Metronidazole)",
         "role": "Anti-Diarrheal & Anti-Protozoal Antimicrobial",
@@ -176,6 +201,7 @@ def normalize_text(text: str) -> str:
     t = re.sub(r'\bhemoglob[a-z]*\b', 'hemoglobin', t)
     t = re.sub(r'\bthyroid[a-z]*\b', 'tsh', t)
     t = re.sub(r'\bcreatin[a-z]*\b', 'creatinine', t)
+    t = re.sub(r'\belectrol[a-z]*\b', 'electral', t)
     return t
 
 def tokenize(text: str):
@@ -280,16 +306,30 @@ def generate_rag_response(query: str, report_context: dict = None, history_conte
         # Check if medication is in the selected report parameters
         report_meds = [p for p in params if matched_med_key in p.get('name', '').lower()]
         if report_meds:
-            lines = [f"* **{p.get('name')}**: Value/Dosage: **{p.get('value_str')} {p.get('unit')}** ({p.get('status')})" for p in report_meds]
+            lines = []
+            for p in report_meds:
+                parts = [f"**{p.get('value_str')} {p.get('unit')}**"]
+                if p.get('frequency') and p.get('frequency') not in ['Not applicable', 'N/A']:
+                    freq_val = p.get('frequency')
+                    freq_str = f"Frequency: {freq_val}"
+                    if freq_val in MEDICATION_KNOWLEDGE:
+                        freq_str += f" ({MEDICATION_KNOWLEDGE[freq_val]['reason']})"
+                    parts.append(freq_str)
+                if p.get('duration') and p.get('duration') not in ['Not applicable', 'Not provided', 'N/A']:
+                    parts.append(f"Duration: {p.get('duration')}")
+                if p.get('observation') and p.get('observation').strip():
+                    parts.append(f"Instructions: {p.get('observation')}")
+                lines.append(f"* **{p.get('name')}**: " + " | ".join(parts) + f" ({p.get('status')})")
             response_paragraphs.append(
                 f"**From your uploaded prescription ({report_context.get('title')}, {report_context.get('report_date')})**:\n\n" +
                 "\n".join(lines)
             )
 
-        response_paragraphs.append(
-            "**Clinical Guidance (ACC/AHA Guidelines)**:\n" +
-            "Antiplatelet medications like Clopidogrel (Clopid 75) work by blocking P2Y12 ADP receptors on platelets, preventing arterial thrombosis. Always take prescribed antiplatelets as instructed by your doctor and do not discontinue without medical consultation."
-        )
+        if retrieved_docs:
+            response_paragraphs.append(
+                f"**Clinical Guidance ({retrieved_docs[0]['source']})**:\n" +
+                f"{retrieved_docs[0]['content']}"
+            )
 
     # 2. Comparative / Trend / Maintenance Inquiry
     elif any(k in query_norm for k in ["compare", "comparing", "previous", "maintained", "maintain", "change", "changed", "trend", "diff", "earlier", "history"]):
